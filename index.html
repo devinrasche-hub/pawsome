@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Pawsome" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Pawsome Pet Services</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg2: #f4f4f2;
+      --bg3: #ebebea;
+      --text: #1a1a18;
+      --text2: #6b6b67;
+      --text3: #9b9b97;
+      --border: rgba(0,0,0,0.10);
+      --border2: rgba(0,0,0,0.18);
+      --radius: 10px;
+      --radius-lg: 14px;
+      --green-bg: #eaf3de;
+      --green-text: #27500a;
+      --green-border: #97c459;
+      --red-bg: #fcebeb;
+      --red-text: #7a1f1f;
+      --amber-bg: #faeeda;
+      --amber-text: #633806;
+      --blue-bg: #e6f1fb;
+      --blue-text: #185fa5;
+      --blue-border: #b5d4f4;
+      --success-bg: #eaf3de;
+      --success-text: #27500a;
+      --success-border: #97c459;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1a;
+        --bg2: #272725;
+        --bg3: #313130;
+        --text: #f0f0ee;
+        --text2: #a0a09c;
+        --text3: #6b6b67;
+        --border: rgba(255,255,255,0.10);
+        --border2: rgba(255,255,255,0.18);
+        --green-bg: #17300a;
+        --green-text: #a8d970;
+        --green-border: #4a8a18;
+        --red-bg: #3a1212;
+        --red-text: #f09595;
+        --amber-bg: #3a2408;
+        --amber-text: #f0b865;
+        --blue-bg: #0e2540;
+        --blue-text: #85b7eb;
+        --blue-border: #185fa5;
+        --success-bg: #17300a;
+        --success-text: #a8d970;
+        --success-border: #4a8a18;
+      }
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+    .app { max-width: 640px; margin: 0 auto; padding: 0 16px 40px; }
+
+    .header { padding: 20px 0 0; margin-bottom: 1.25rem; }
+    .header h1 { font-size: 22px; font-weight: 600; color: var(--text); }
+    .header p { font-size: 13px; color: var(--text2); margin-top: 3px; }
+
+    .tabs { display: flex; gap: 2px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .tab { background: none; border: none; padding: 9px 16px; font-size: 14px; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; transition: color 0.15s; }
+    .tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+    .stat { background: var(--bg2); border-radius: var(--radius); padding: 12px; }
+    .stat-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-value { font-size: 20px; font-weight: 600; color: var(--text); }
+    .stat-value.green { color: var(--green-text); }
+    .stat-value.amber { color: var(--amber-text); }
+
+    .banner { border-radius: var(--radius); padding: 10px 14px; margin-bottom: 1.25rem; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    .banner.info { background: var(--blue-bg); color: var(--blue-text); }
+    .banner.success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+
+    .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 1rem; }
+    .card-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 130px; }
+    .form-group label { font-size: 12px; color: var(--text2); }
+    .form-group input, .form-group select { height: 38px; width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 14px; padding: 0 10px; font-family: inherit; outline: none; appearance: none; -webkit-appearance: none; }
+    .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--border2); }
+    .form-actions { display: flex; justify-content: flex-end; margin-top: 6px; }
+
+    .btn { background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); padding: 9px 18px; font-size: 14px; cursor: pointer; color: var(--text); font-family: inherit; transition: background 0.15s; }
+    .btn:hover { background: var(--bg2); }
+    .btn:active { transform: scale(0.98); }
+    .btn-solid-green { background: #27500a; border: 2px solid #97c459; color: #fff; border-radius: var(--radius); padding: 9px 18px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .btn-solid-green:hover { background: #3b6d11; }
+    .btn-solid-green:active { transform: scale(0.98); }
+    .btn-ghost { background: none; border: none; font-size: 13px; cursor: pointer; color: var(--text2); padding: 9px 6px; font-family: inherit; }
+    .btn-ghost:hover { color: var(--text); }
+
+    .new-client-panel { border: 1.5px solid var(--success-border); border-radius: var(--radius); background: var(--bg2); padding: 12px; margin: 6px 0 8px; }
+    .nc-title { font-size: 11px; font-weight: 600; color: var(--success-text); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .nc-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .nc-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 120px; }
+    .nc-group label { font-size: 11px; color: var(--text2); }
+    .nc-group input, .nc-group select { height: 34px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 13px; padding: 0 10px; font-family: inherit; outline: none; appearance: none; -webkit-appearance: none; width: 100%; }
+    .nc-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 26px; }
+    .nc-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+
+    .reschedule-card { border: 1.5px solid var(--success-border); border-radius: var(--radius-lg); background: var(--bg2); padding: 14px 16px; margin-bottom: 12px; }
+    .reschedule-card p { font-size: 14px; color: var(--text); line-height: 1.55; margin-bottom: 12px; }
+    .reschedule-card p strong { color: var(--text); }
+    .reschedule-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .btn-yes { background: #27500a; border: 2px solid #97c459; color: #fff; border-radius: var(--radius); padding: 7px 16px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .btn-yes:hover { background: #3b6d11; }
+    .btn-no { background: none; border: 1px solid var(--border2); border-radius: var(--radius); padding: 7px 16px; font-size: 13px; cursor: pointer; color: var(--text2); font-family: inherit; }
+    .btn-no:hover { background: var(--bg3); }
+
+    .filter-row { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
+    .filter-row label { font-size: 13px; color: var(--text2); }
+    .filter-row select { height: 34px; font-size: 13px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); padding: 0 28px 0 10px; font-family: inherit; outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+
+    .section-label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+
+    .list { display: flex; flex-direction: column; gap: 8px; }
+    .job-card, .client-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+    .job-icon { font-size: 18px; flex-shrink: 0; }
+    .job-info, .client-info { flex: 1; min-width: 0; }
+    .job-top { font-size: 14px; font-weight: 500; color: var(--text); }
+    .job-sub { font-size: 12px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .job-right, .client-actions { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+    .job-amt { font-size: 14px; font-weight: 500; color: var(--text); }
+
+    .badge { font-size: 11px; padding: 4px 10px; border-radius: 999px; cursor: pointer; border: none; font-family: inherit; font-weight: 500; }
+    .badge-paid { background: var(--green-bg); color: var(--green-text); }
+    .badge-unpaid { background: var(--red-bg); color: var(--red-text); }
+    .freq-badge { font-size: 11px; padding: 3px 9px; border-radius: 999px; background: var(--bg3); color: var(--text2); }
+
+    .btn-icon { background: none; border: none; cursor: pointer; font-size: 13px; color: var(--text3); padding: 4px 6px; line-height: 1; }
+    .btn-icon:hover { color: var(--red-text); }
+
+    .btn-sm { background: none; border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 10px; font-size: 12px; cursor: pointer; color: var(--text2); white-space: nowrap; font-family: inherit; }
+    .btn-sm:hover { background: var(--bg2); }
+    .btn-sm.primary { color: var(--blue-text); border-color: var(--blue-border); }
+    .btn-sm.primary:hover { background: var(--blue-bg); }
+    .btn-sm.danger { color: var(--red-text); border-color: var(--red-bg); }
+    .btn-sm.danger:hover { background: var(--red-bg); }
+
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--green-bg); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--green-text); flex-shrink: 0; }
+    .avatar-lg { width: 54px; height: 54px; border-radius: 50%; background: var(--green-bg); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; color: var(--green-text); flex-shrink: 0; }
+    .client-name { font-size: 14px; font-weight: 500; color: var(--text); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; font-size: 14px; color: var(--text2); padding: 0; margin-bottom: 1.25rem; font-family: inherit; }
+    .back-btn:hover { color: var(--text); }
+
+    .detail-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; }
+    .detail-header-text h2 { font-size: 20px; font-weight: 600; color: var(--text); }
+    .detail-header-text p { font-size: 13px; color: var(--text2); margin-top: 3px; }
+
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: var(--text2); font-size: 13px; }
+    .info-value { color: var(--text); font-weight: 500; }
+
+    .rate-input { width: 72px; height: 30px; font-size: 13px; text-align: right; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg2); color: var(--text); padding: 0 8px; font-family: inherit; outline: none; }
+    .freq-select-inline { height: 30px; font-size: 13px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg2); color: var(--text); padding: 0 24px 0 8px; font-family: inherit; outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
+
+    .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text2); font-size: 14px; }
+
+    @media (max-width: 400px) {
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+      .stat-value { font-size: 17px; }
+      .job-card, .client-card { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🐾 Pawsome Pet Services</h1>
+    <p>Poop pickup job tracker</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('jobs')">Jobs</button>
+    <button class="tab" onclick="switchTab('clients')">Clients</button>
+  </div>
+
+  <!-- JOBS PANEL -->
+  <div id="panel-jobs" class="panel active">
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Total jobs</div><div class="stat-value" id="stat-total">0</div></div>
+      <div class="stat"><div class="stat-label">Paid out</div><div class="stat-value green" id="stat-paid">$0</div></div>
+      <div class="stat"><div class="stat-label">Owed</div><div class="stat-value amber" id="stat-owed">$0</div></div>
+    </div>
+
+    <div id="next-banner" class="banner info" style="display:none;"><span>📅</span><span id="next-text"></span></div>
+    <div id="reschedule-container"></div>
+
+    <div class="card">
+      <div class="card-title">Log a job</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Client</label>
+          <select id="job-client-select" onchange="handleClientSelect()">
+            <option value="">— select client —</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="new-client-panel" class="new-client-panel" style="display:none;">
+        <div class="nc-title">New client</div>
+        <div class="nc-row">
+          <div class="nc-group"><label>Name</label><input type="text" id="nc-name" placeholder="Full name" /></div>
+          <div class="nc-group"><label>Address</label><input type="text" id="nc-addr" placeholder="123 Main St" /></div>
+        </div>
+        <div class="nc-row">
+          <div class="nc-group"><label>Phone</label><input type="text" id="nc-phone" placeholder="(555) 000-0000" inputmode="numeric" maxlength="14" /></div>
+          <div class="nc-group"><label>Default rate ($)</label><input type="number" id="nc-rate" placeholder="20" min="0" step="0.01" /></div>
+        </div>
+        <div class="nc-row">
+          <div class="nc-group"><label>Frequency</label>
+            <select id="nc-frequency">
+              <option value="biweekly">Biweekly</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </div>
+          <div class="nc-group"></div>
+        </div>
+        <div class="nc-actions">
+          <button class="btn-ghost" onclick="cancelNewClient()">Cancel</button>
+          <button class="btn-solid-green" onclick="saveNewClient()">Save client ↗</button>
+        </div>
+      </div>
+
+      <div class="form-row" style="margin-top:6px;">
+        <div class="form-group"><label>Date</label><input type="date" id="job-date" /></div>
+        <div class="form-group">
+          <label>Frequency</label>
+          <select id="job-frequency">
+            <option value="biweekly">Biweekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Pay ($)</label><input type="number" id="job-pay" placeholder="0.00" min="0" step="0.01" /></div>
+        <div class="form-group"><label>Notes</label><input type="text" id="job-notes" placeholder="e.g. muddy, extra bags" /></div>
+      </div>
+      <div class="form-actions"><button class="btn" onclick="addJob()">Add job ↗</button></div>
+    </div>
+
+    <div class="filter-row">
+      <label>Filter:</label>
+      <select id="filter-client" onchange="renderJobs()"><option value="">All clients</option></select>
+    </div>
+    <div class="section-label">Job history</div>
+    <div class="list" id="job-list"></div>
+  </div>
+
+  <!-- CLIENTS PANEL -->
+  <div id="panel-clients" class="panel">
+    <div id="clients-list-view">
+      <div class="card">
+        <div class="card-title">Add a client</div>
+        <div class="form-row">
+          <div class="form-group"><label>Name</label><input type="text" id="client-name" placeholder="Full name" /></div>
+          <div class="form-group"><label>Address</label><input type="text" id="client-addr" placeholder="123 Main St" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone (optional)</label><input type="text" id="client-phone" placeholder="(555) 000-0000" inputmode="numeric" maxlength="14" /></div>
+          <div class="form-group"><label>Default rate ($)</label><input type="number" id="client-rate" placeholder="20" min="0" step="0.01" /></div>
+        </div>
+        <div class="form-actions"><button class="btn" onclick="addClient()">Add client ↗</button></div>
+      </div>
+      <div class="section-label">Clients</div>
+      <div class="list" id="client-list"></div>
+    </div>
+
+    <div id="client-detail-view" style="display:none;">
+      <button class="back-btn" onclick="closeClientDetail()">← Back</button>
+      <div class="detail-header">
+        <div class="avatar-lg" id="detail-avatar"></div>
+        <div class="detail-header-text">
+          <h2 id="detail-name"></h2>
+          <p id="detail-job-count"></p>
+        </div>
+      </div>
+      <div class="stats" style="margin-bottom:1.25rem;">
+        <div class="stat"><div class="stat-label">Jobs</div><div class="stat-value" id="detail-stat-jobs">0</div></div>
+        <div class="stat"><div class="stat-label">Paid</div><div class="stat-value green" id="detail-stat-paid">$0</div></div>
+        <div class="stat"><div class="stat-label">Owed</div><div class="stat-value amber" id="detail-stat-owed">$0</div></div>
+      </div>
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="info-row"><span class="info-label">Address</span><span class="info-value" id="detail-addr">—</span></div>
+        <div class="info-row"><span class="info-label">Phone</span><span class="info-value" id="detail-phone">—</span></div>
+        <div class="info-row">
+          <span class="info-label">Default rate</span>
+          <span style="display:flex;align-items:center;gap:4px;">
+            <span style="font-size:13px;color:var(--text2);">$</span>
+            <input class="rate-input" type="number" id="detail-rate" min="0" step="0.01" onchange="updateClientRateFromDetail(this.value)" />
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Frequency</span>
+          <select class="freq-select-inline" id="detail-frequency" onchange="updateClientFrequencyFromDetail(this.value)">
+            <option value="biweekly">Biweekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      <div class="section-label">Job history</div>
+      <div class="list" id="detail-job-list"></div>
+      <div style="margin-top:1.25rem;display:flex;justify-content:flex-end;">
+        <button class="btn-sm danger" onclick="deleteClientFromDetail()">Remove client</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let clients = JSON.parse(localStorage.getItem('pps-clients') || '[]');
+  let jobs = JSON.parse(localStorage.getItem('pps-jobs') || '[]');
+  let activeDetailId = null;
+  let pendingReschedule = null;
+
+  const today = new Date();
+  document.getElementById('job-date').valueAsDate = today;
+
+  function save() {
+    localStorage.setItem('pps-clients', JSON.stringify(clients));
+    localStorage.setItem('pps-jobs', JSON.stringify(jobs));
+  }
+
+  function initials(name) {
+    return name.trim().split(' ').filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.toLowerCase().includes(tab)) t.classList.add('active');
+    });
+  }
+
+  function formatPhone(raw) {
+    const d = raw.replace(/\D/g, '').slice(0, 10);
+    if (d.length < 4) return d;
+    if (d.length < 7) return '(' + d.slice(0,3) + ') ' + d.slice(3);
+    return '(' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6);
+  }
+
+  function wirePhone(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function() {
+      const pos = this.selectionStart; const prev = this.value;
+      this.value = formatPhone(this.value);
+      const diff = this.value.length - prev.length;
+      this.setSelectionRange(pos + diff, pos + diff);
+    });
+    el.addEventListener('blur', function() { this.value = formatPhone(this.value); });
+  }
+  wirePhone('client-phone');
+  wirePhone('nc-phone');
+
+  function formatDate(str) {
+    const d = new Date(str + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function addDays(dateStr, days) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function showReschedulePrompt(job) {
+    const client = clients.find(c => c.id === job.clientId);
+    const freq = job.frequency || (client && client.frequency) || 'biweekly';
+    const interval = freq === 'weekly' ? 7 : 14;
+    const nextDate = addDays(job.date, interval);
+    const freqLabel = freq === 'weekly' ? 'weekly' : 'biweekly';
+    pendingReschedule = { job, nextDate, freq };
+    const container = document.getElementById('reschedule-container');
+    container.innerHTML = `
+      <div class="reschedule-card">
+        <p>Job marked as paid. Schedule the next ${freqLabel} appointment for <strong>${formatDate(nextDate)}</strong>?</p>
+        <div class="reschedule-actions">
+          <button class="btn-no" onclick="dismissReschedule()">No thanks</button>
+          <button class="btn-yes" onclick="confirmReschedule()">Schedule it ↗</button>
+        </div>
+      </div>`;
+  }
+
+  function dismissReschedule() {
+    pendingReschedule = null;
+    document.getElementById('reschedule-container').innerHTML = '';
+  }
+
+  function confirmReschedule() {
+    if (!pendingReschedule) return;
+    const { job, nextDate, freq } = pendingReschedule;
+    jobs.unshift({ id: Date.now(), clientId: job.clientId, clientName: job.clientName, date: nextDate, frequency: freq, pay: job.pay, notes: '', paid: false });
+    save();
+    pendingReschedule = null;
+    document.getElementById('reschedule-container').innerHTML = '';
+    renderJobs(); updateStats(); updateNextBanner();
+  }
+
+  function handleClientSelect() {
+    const val = document.getElementById('job-client-select').value;
+    const panel = document.getElementById('new-client-panel');
+    if (val === '__new__') {
+      panel.style.display = 'block';
+    } else {
+      panel.style.display = 'none';
+      if (val) {
+        const c = clients.find(c => c.id === parseInt(val));
+        if (c) {
+          if (c.rate) document.getElementById('job-pay').value = c.rate.toFixed(2);
+          if (c.frequency) document.getElementById('job-frequency').value = c.frequency;
+        }
+      } else {
+        document.getElementById('job-pay').value = '';
+      }
+    }
+  }
+
+  function cancelNewClient() {
+    document.getElementById('new-client-panel').style.display = 'none';
+    document.getElementById('job-client-select').value = '';
+    ['nc-name','nc-addr','nc-phone','nc-rate'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('nc-frequency').value = 'biweekly';
+  }
+
+  function saveNewClient() {
+    const name = document.getElementById('nc-name').value.trim();
+    if (!name) { document.getElementById('nc-name').focus(); return; }
+    const addr = document.getElementById('nc-addr').value.trim();
+    const phone = formatPhone(document.getElementById('nc-phone').value.trim());
+    const rate = parseFloat(document.getElementById('nc-rate').value) || 20;
+    const frequency = document.getElementById('nc-frequency').value;
+    const c = { id: Date.now(), name, addr, phone, rate, frequency };
+    clients.push(c); save();
+    populateClientSelects(); renderClients();
+    document.getElementById('job-client-select').value = c.id;
+    document.getElementById('job-frequency').value = frequency;
+    document.getElementById('job-pay').value = rate.toFixed(2);
+    document.getElementById('new-client-panel').style.display = 'none';
+    ['nc-name','nc-addr','nc-phone','nc-rate'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('nc-frequency').value = 'biweekly';
+  }
+
+  function populateClientSelects() {
+    const sel = document.getElementById('job-client-select');
+    const filter = document.getElementById('filter-client');
+    const prevSel = sel.value; const prevFilter = filter.value;
+    sel.innerHTML = '<option value="">— select client —</option>';
+    clients.forEach(c => { sel.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
+    sel.innerHTML += '<option value="__new__">+ Add new client</option>';
+    filter.innerHTML = '<option value="">All clients</option>';
+    clients.forEach(c => { filter.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
+    if (prevSel && prevSel !== '__new__') sel.value = prevSel;
+    if (prevFilter) filter.value = prevFilter;
+  }
+
+  function addClient() {
+    const name = document.getElementById('client-name').value.trim();
+    if (!name) return;
+    const addr = document.getElementById('client-addr').value.trim();
+    const phone = formatPhone(document.getElementById('client-phone').value.trim());
+    const rate = parseFloat(document.getElementById('client-rate').value) || 20;
+    clients.push({ id: Date.now(), name, addr, phone, rate, frequency: 'biweekly' }); save();
+    ['client-name','client-addr','client-phone','client-rate'].forEach(id => document.getElementById(id).value = '');
+    populateClientSelects(); renderClients();
+  }
+
+  function updateClientRate(id, val) {
+    const c = clients.find(c => c.id === id);
+    if (c) { c.rate = parseFloat(val) || 0; save(); }
+  }
+  function updateClientRateFromDetail(val) { updateClientRate(activeDetailId, val); }
+  function updateClientFrequency(id, val) {
+    const c = clients.find(c => c.id === id);
+    if (c) { c.frequency = val; save(); }
+  }
+  function updateClientFrequencyFromDetail(val) { updateClientFrequency(activeDetailId, val); }
+
+  function openClientDetail(id) {
+    activeDetailId = id;
+    const c = clients.find(c => c.id === id); if (!c) return;
+    const cJobs = jobs.filter(j => j.clientId === id);
+    const paid = cJobs.filter(j => j.paid).reduce((s,j) => s+j.pay, 0);
+    const owed = cJobs.filter(j => !j.paid).reduce((s,j) => s+j.pay, 0);
+    document.getElementById('detail-avatar').textContent = initials(c.name);
+    document.getElementById('detail-name').textContent = c.name;
+    document.getElementById('detail-job-count').textContent = cJobs.length + ' job' + (cJobs.length !== 1 ? 's' : '') + ' total';
+    document.getElementById('detail-addr').textContent = c.addr || '—';
+    document.getElementById('detail-phone').textContent = c.phone || '—';
+    document.getElementById('detail-rate').value = c.rate.toFixed(2);
+    document.getElementById('detail-frequency').value = c.frequency || 'biweekly';
+    document.getElementById('detail-stat-jobs').textContent = cJobs.length;
+    document.getElementById('detail-stat-paid').textContent = '$' + paid.toFixed(2);
+    document.getElementById('detail-stat-owed').textContent = '$' + owed.toFixed(2);
+    const list = document.getElementById('detail-job-list');
+    if (!cJobs.length) { list.innerHTML = '<div class="empty">No jobs yet.</div>'; }
+    else {
+      list.innerHTML = [...cJobs].sort((a,b) => b.date.localeCompare(a.date)).map(job => `
+        <div class="job-card">
+          <div class="job-icon">💩</div>
+          <div class="job-info">
+            <div class="job-top">${formatDate(job.date)}</div>
+            <div class="job-sub">${job.notes || ''}</div>
+          </div>
+          <div class="job-right">
+            ${job.pay > 0 ? `<span class="job-amt">$${job.pay.toFixed(2)}</span>` : ''}
+            <button class="badge ${job.paid ? 'badge-paid' : 'badge-unpaid'}" onclick="togglePaidDetail(${job.id})">${job.paid ? 'Paid' : 'Unpaid'}</button>
+          </div>
+        </div>`).join('');
+    }
+    document.getElementById('clients-list-view').style.display = 'none';
+    document.getElementById('client-detail-view').style.display = 'block';
+  }
+
+  function closeClientDetail() {
+    activeDetailId = null;
+    document.getElementById('client-detail-view').style.display = 'none';
+    document.getElementById('clients-list-view').style.display = 'block';
+  }
+
+  function togglePaidDetail(id) {
+    const j = jobs.find(j => j.id === id); if (!j) return;
+    j.paid = !j.paid; save(); openClientDetail(activeDetailId); updateStats();
+  }
+
+  function deleteClientFromDetail() {
+    if (!activeDetailId) return;
+    clients = clients.filter(c => c.id !== activeDetailId);
+    jobs = jobs.filter(j => j.clientId !== activeDetailId);
+    save(); populateClientSelects(); renderClients(); renderJobs(); updateStats(); closeClientDetail();
+  }
+
+  function addJob() {
+    const selVal = document.getElementById('job-client-select').value;
+    const date = document.getElementById('job-date').value;
+    const frequency = document.getElementById('job-frequency').value;
+    if (!selVal || selVal === '__new__' || !date) return;
+    const clientId = parseInt(selVal);
+    const c = clients.find(c => c.id === clientId);
+    jobs.unshift({ id: Date.now(), clientId, clientName: c ? c.name : 'Unknown', date, frequency, pay: parseFloat(document.getElementById('job-pay').value) || 0, notes: document.getElementById('job-notes').value.trim(), paid: false });
+    save();
+    document.getElementById('job-pay').value = '';
+    document.getElementById('job-notes').value = '';
+    renderJobs(); updateStats(); updateNextBanner();
+  }
+
+  function togglePaid(id) {
+    const j = jobs.find(j => j.id === id); if (!j) return;
+    const wasPaid = j.paid; j.paid = !j.paid; save();
+    renderJobs(); updateStats();
+    if (j.paid && !wasPaid) showReschedulePrompt(j);
+  }
+
+  function deleteJob(id) {
+    jobs = jobs.filter(j => j.id !== id); save(); renderJobs(); updateStats(); updateNextBanner();
+  }
+
+  function updateStats() {
+    const filterId = parseInt(document.getElementById('filter-client').value) || null;
+    const f = filterId ? jobs.filter(j => j.clientId === filterId) : jobs;
+    document.getElementById('stat-total').textContent = f.length;
+    document.getElementById('stat-paid').textContent = '$' + f.filter(j => j.paid).reduce((s,j) => s+j.pay, 0).toFixed(2);
+    document.getElementById('stat-owed').textContent = '$' + f.filter(j => !j.paid).reduce((s,j) => s+j.pay, 0).toFixed(2);
+  }
+
+  function updateNextBanner() {
+    const banner = document.getElementById('next-banner');
+    const filterId = parseInt(document.getElementById('filter-client').value) || null;
+    const relevant = filterId ? jobs.filter(j => j.clientId === filterId) : jobs;
+    if (!relevant.length) { banner.style.display = 'none'; return; }
+    const last = [...relevant].sort((a,b) => b.date.localeCompare(a.date))[0];
+    const interval = last.frequency === 'weekly' ? 7 : 14;
+    const next = new Date(last.date + 'T00:00:00'); next.setDate(next.getDate() + interval);
+    const diff = Math.round((next - today) / 86400000);
+    const nextStr = next.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    let msg = diff < 0 ? `Overdue — was due ${nextStr}` : diff === 0 ? 'Next job is today!' : `Next job in ${diff} day${diff !== 1 ? 's' : ''} — ${nextStr}`;
+    if (filterId) { const c = clients.find(c => c.id === filterId); if (c) msg = c.name + ': ' + msg; }
+    document.getElementById('next-text').textContent = msg;
+    banner.style.display = 'flex';
+  }
+
+  function renderClients() {
+    const list = document.getElementById('client-list');
+    if (!clients.length) { list.innerHTML = '<div class="empty">No clients yet.</div>'; return; }
+    list.innerHTML = clients.map(c => {
+      const n = jobs.filter(j => j.clientId === c.id).length;
+      return `<div class="client-card">
+        <div class="avatar">${initials(c.name)}</div>
+        <div class="client-info"><div class="client-name">${c.name}</div></div>
+        <div class="client-actions">
+          <span class="btn-sm">${n} job${n !== 1 ? 's' : ''}</span>
+          <button class="btn-sm primary" onclick="openClientDetail(${c.id})">View →</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderJobs() {
+    const list = document.getElementById('job-list');
+    const filterId = parseInt(document.getElementById('filter-client').value) || null;
+    const filtered = filterId ? jobs.filter(j => j.clientId === filterId) : jobs;
+    updateStats(); updateNextBanner();
+    if (!filtered.length) { list.innerHTML = '<div class="empty">No jobs logged yet.</div>'; return; }
+    list.innerHTML = filtered.map(job => {
+      const c = clients.find(c => c.id === job.clientId);
+      const addr = c && c.addr ? c.addr : '';
+      const name = job.clientName || (c ? c.name : 'Unknown');
+      const fl = job.frequency === 'weekly' ? 'Weekly' : 'Biweekly';
+      return `<div class="job-card">
+        <div class="job-icon">💩</div>
+        <div class="job-info">
+          <div class="job-top">${name} · ${formatDate(job.date)}</div>
+          <div class="job-sub">${addr}${job.notes ? (addr ? ' · ' : '') + job.notes : ''}</div>
+        </div>
+        <div class="job-right">
+          <span class="freq-badge">${fl}</span>
+          ${job.pay > 0 ? `<span class="job-amt">$${job.pay.toFixed(2)}</span>` : ''}
+          <button class="badge ${job.paid ? 'badge-paid' : 'badge-unpaid'}" onclick="togglePaid(${job.id})">${job.paid ? 'Paid' : 'Unpaid'}</button>
+          <button class="btn-icon" onclick="deleteJob(${job.id})">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  populateClientSelects();
+  renderClients();
+  renderJobs();
+  updateStats();
+  updateNextBanner();
+</script>
+</body>
+</html>
